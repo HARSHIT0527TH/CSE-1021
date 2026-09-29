@@ -1,4 +1,5 @@
-#{Sir} -- Harshit Sir
+
+
 from blacklist import check_blacklist
 from domainextractor import extract_domain
 from patternchecker import check_patt
