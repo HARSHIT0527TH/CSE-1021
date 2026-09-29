@@ -1,4 +1,4 @@
-# Scam 
+# Scam-URL-Checker
 
 A small Python program that checks if a link looks like a scam. I made it in my first semester when we were learning functions, loops and if/else.
 
