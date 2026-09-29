@@ -1,4 +1,4 @@
-#{Sir} -- Harshit Sir
+
 def check_blacklist(domain):
     
     # blacklist wale code
