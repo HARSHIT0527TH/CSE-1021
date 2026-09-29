@@ -1,4 +1,4 @@
-#{Sir} -- Harshit Sir
+
 def check_patt(domain,url):
     score = 0
     flag = []
