@@ -11,8 +11,8 @@ You give it a URL. It pulls out the domain, checks that domain against a list of
 You only need Python 3.6 or newer, nothing else to install.
 
 ```bash
-git clone https://github.com/yourusername/scam-url-checker.git
-cd scam-url-checker
+git clone https://github.com/HARSHIT0527TH/CSE-1021.git
+cd CSE-1021
 python main.py
 ```
 
