@@ -1,18 +1,14 @@
-# Scam-URL-Checker
-IT helps U to Identify the scam URL 
 # Scam URL Checker
 
-A simple Python tool that checks if a URL is suspicious or malicious. Learned this in my first semester while studying functions, loops, and conditionals.
+A small Python program that checks if a link looks like a scam. I made it in my first semester when we were learning functions, loops and if/else.
 
-## What does it do
+## What it does
 
-Takes a URL, extracts the domain, checks it against a list of known scam sites, and looks for suspicious patterns like missing HTTPS, weird hyphens, or sketchy keywords. Then gives you a risk score out of 100.
+You give it a URL. It pulls out the domain, checks that domain against a list of scam sites I put in the code, and then looks for a few suspicious things like no https, lots of hyphens or words like "login" and "verify". At the end it adds up a score out of 100 and tells you how risky the link is.
 
-Basically tells you whether a link is sketchy or not.
+## How to run it
 
-## Installation
-
-You need Python 3.6+ installed. That's it, no fancy dependencies.
+You only need Python 3.6 or newer, nothing else to install.
 
 ```bash
 git clone https://github.com/yourusername/scam-url-checker.git
@@ -20,9 +16,9 @@ cd scam-url-checker
 python main.py
 ```
 
-## How to use it
+Type the full link when it asks. It has to start with `http://` or `https://`, otherwise it shows an error and closes.
 
-Run the program and enter a URL:
+Example run:
 
 ```
 Sir plz enter the string: https://amazon-account-verify.info
@@ -30,148 +26,131 @@ Sir plz enter the string: https://amazon-account-verify.info
  Wait Sir just Analyzing URL...
 
 Extracted domain: amazon-account-verify.info
-Domain found in scam database!
+ CRITICAL: Domain found in scam database!
 Sir Now Checking blacklist...
-Suspicious word found: verify
+Suspicious word found:verify
 Sir Now Checking patterns...
 
-======================================================================
-         SCAM URL CHECKER - DETAILED RISK REPORT
-======================================================================
 
-Domain: amazon-account-verify.info
-Total Risk Score: 58/100
+**********************************************************************
+*                                                                    *
+*                  SCAM URL CHECKER - RISK REPORT                    *
+*                                                                    *
+**********************************************************************
 
+
+----------------------------------------------------------------------
+Sir the domain of URL: amazon-account-verify.info
+
+
+Sir the risk sore is: 58/100'
 ----------------------------------------------------------------------
 DETECTED FLAGS:
 ----------------------------------------------------------------------
-  [!] Domain found in scam database
-  [!] No HTTPS encryption
-  [!] Suspicious keyword: verify
+  [!] Sir domain found in the scam_database
+  [!] sir Suspecious key word detected: verify
 
 ----------------------------------------------------------------------
 RISK LEVEL ASSESSMENT:
 ----------------------------------------------------------------------
-WARNING: HIGH RISK - AVOID
+ Sir Risk level is: Mid
+ Sir it's a bit suspecious -- Proceed with Caution
 ----------------------------------------------------------------------
 ```
 
-## How it works
+If nothing suspicious is found it just prints `✓ No flags detected - URL appears SAFE!`
 
-The program has 4 main parts:
+## Files
 
-1. **URL Parser** - Takes the messy URL and extracts just the domain part
-   - Strips out http:// or https://
-   - Removes www. if its there
-   - Gets rid of everything after the domain like /login or ?stuff
-
-2. **Blacklist Check** - Compares the domain against 180+ known scam domains
-   - If found, adds 50 points to the score
-
-3. **Pattern Detector** - Looks for red flags
-   - No HTTPS = 15 points (risky, not secure)
-   - Suspicious words like "login", "verify", "confirm" = 8 points
-   - Too many hyphens = 10 points (typosquatting trick)
-   - Short domain name = 5 points
-   - IP address instead of domain = 20 points
-
-4. **Risk Calculator** - Adds up all the points, caps it at 100, and tells you the verdict
-
-## Risk Levels
-
-0-39: Low risk, probably safe
-40-64: Medium risk, be careful
-65-79: High risk, pretty suspicious
-80-100: Critical, definitely don't visit
-
-## File Structure
+Everything is in one folder:
 
 ```
 scam-url-checker/
 ├── main.py
-├── modules/
-│   ├── url_parser.py
-│   ├── blacklist.py
-│   └── patternchecker.py
+├── blacklist.py
+├── domainextractor.py
+├── patternchecker.py
 └── README.md
 ```
 
-main.py does the main work - it calls the other modules and shows results. Each module handles one specific thing.
+- `main.py` takes the input, calls the other three files, adds up the score and prints the report
+- `domainextractor.py` gets the domain out of the URL
+- `blacklist.py` has the list of scam domains
+- `patternchecker.py` looks for the suspicious patterns
 
-## What I learned making this
+## How it works
 
-- How to write functions and pass data between them
-- How to use loops to check through lists
-- String operations like slicing and checking if something is inside a string
-- Breaking code into separate modules so its organized
-- How to structure a project
+**Getting the domain.** The URL is messy, so first it removes `http://` or `https://` and then `www.` if there is one. After that it goes through the letters one by one and stops when it reaches `/`, `?`, `:` or `#`. Whatever it collected before that is the domain.
 
-## The Blacklist
+**Blacklist.** The domain is turned into lowercase and compared with every domain in the list (around 150). It has to match exactly. If it does, the score gets 50 points and a flag is added.
 
-Has domains that pretend to be popular sites:
-- PayPal fakes (different typos and variations)
-- Amazon account verification scams
-- Google phishing pages
-- Facebook/Instagram impersonators
-- Microsoft and Apple fakes
-- Fake bank sites
-- Crypto and NFT scams
-- Lottery and prize winning scams
-- Generic "verify your account" domains
+The list has fake versions of PayPal, Amazon, Google, Facebook, Instagram, WhatsApp, Apple, Microsoft and Netflix, fake bank and tax sites (SBI, HDFC, IRS, HMRC and so on), lottery and free gift scams, crypto scams, and some general "verify your account" type domains.
 
-Around 180 domains total that are known to be sketchy.
+**Patterns.** This part adds points for each thing it finds:
 
-## Scoring Breakdown
+- more than 2 hyphens in the domain: 10 points
+- domain shorter than 5 characters: 5 points
+- no `https://` in the URL: 15 points
+- one of these words anywhere in the URL: 8 points (login, verify, confirm, update, secure, account, suspend, alert)
+- exactly 3 dots in the domain, which I treat as an IP address: 20 points
 
-Blacklist match: 50 points
-No HTTPS: 15 points
-Suspicious keywords: 8 points
-Too many hyphens: 10 points
-Short domain: 5 points
-IP address: 20 points
-Max total: 100 points
+The keyword check stops after the first word it finds, so it can only add 8 points once.
 
-## Test it out
+**Final score.** `calc_risk()` adds the blacklist score and the pattern score together. If the total goes above 100 it is set to 100.
 
-Try these URLs to see it in action:
+## Risk levels
+
+- 80 to 100: Critical, don't visit
+- 65 to 79: High, avoid if possible
+- 40 to 64: Mid, be careful
+- 15 to 30: Kind of low, stay a bit alert
+- 0 to 14 and 31 to 39: Very low, probably safe
+
+Scores from 31 to 39 end up in "Very low" because of how my if/elif conditions are written. I noticed it late and haven't fixed it yet.
+
+## Try these
 
 ```
 https://google.com
-Expected: Score 0, Safe
+score 0, very low
 
 https://paypal-login.com
-Expected: Score 50+, High risk
+score 58, mid
 
 http://suspicious-site.com/login
-Expected: Score 23, Medium risk
+score 23, kind of low
 ```
 
-## Limitations
+## Things it can't do
 
-This is a first semester project so it has some limitations:
-- The blacklist is static, not updated in real time
-- No machine learning or anything fancy
-- Doesn't check actual SSL certificates
-- Just pattern matching based on heuristics
-- Terminal only, no graphical interface
+- The blacklist is fixed inside the code, it doesn't update by itself
+- The domain has to match the list exactly, so something like `login.paypal-login.com` is not caught by the blacklist
+- The IP check only counts dots, so a normal domain with 3 dots (like `mail.example.co.uk`) also gets flagged
+- Only one suspicious word is counted per URL
+- It doesn't check the real SSL certificate, it only looks at whether the text `https://` is there
+- No machine learning, it is only simple rules
+- Terminal only, no GUI
 
-## Future stuff
+## Ideas for later
 
-Could add:
-- A GUI with buttons instead of terminal
-- Real time updates to the scam list
-- Actually verify SSL certificates
-- Make it a web app
-- Browser extension maybe
+- A GUI with buttons
+- Getting the scam list from the internet so it stays updated
+- Checking the actual SSL certificate
+- A web app or a browser extension
 
-## Who made this
+## What I learned
 
-First year CS student at VIT Bhopal, learning how to actually build something useful with basic Python concepts.
+- Writing functions and passing values between them
+- Using loops to go through lists and strings
+- String things like slicing and checking if something is inside another string
+- Splitting a project into different files so it stays organised
+
+## About
+
+I'm a first year CS student at VIT Bhopal. Thanks to Harshit Sir for the guidance.
 
 ## License
 
-MIT - use it however you want for school projects or whatever.
+MIT, use it for school projects or whatever you like.
 
----
-
-If something is broken or you find a scam domain that's not on the list, let me know.
+If something is broken or you find a scam domain that's missing from the list, let me know.
