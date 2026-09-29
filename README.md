@@ -147,7 +147,7 @@ score 23, kind of low
 
 ## About
 
-I'm a first year CS student at VIT Bhopal. Thanks to Harshit Sir for the guidance.
+I'm a first year CS student at VIT Bhopal. 
 
 ## License
 
